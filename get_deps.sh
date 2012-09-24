@@ -17,7 +17,7 @@ rm pidgin-sipe.tar.bz2
 rm meanwhile.tar.gz
 popd > /dev/null
 
-wget https://github.com/downloads/filmor/webos-messaging/libs.tar.bz2
+wget --no-check-certificate https://github.com/downloads/filmor/webos-messaging/libs.tar.bz2
 tar -xvjf libs.tar.bz2
 rm libs.tar.bz2
 
