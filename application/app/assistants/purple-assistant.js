@@ -157,7 +157,7 @@ PurpleAssistant.prototype.eventFail = function(response) {
     if (response.errorCode) {
         var text = response.errorText || response.error || "";
         Mojo.Log.info("Showing error " + text);
-        Mojo.Controller.errorDialog(text);
+        this.controller.errorDialog(text);
     }
     this.enableControls();
 };
@@ -191,12 +191,17 @@ PurpleAssistant.prototype.showPopup = function(popup) {
     var dialog = {
         message: ""
     };
+	
     if ("title" in popup)
+	{
         dialog.title = popup.title;
-    if ("primary" in response)
+	}
+    if ("primary" in popup)
+	{
         dialog.message += popup.primary;
-    if ("secondary" in response)
-    {
+	}
+    if ("secondary" in popup)
+    { 
         if (dialog.message != "")
             dialog.message += "<br/>";
         dialog.message += popup.secondary;
@@ -206,13 +211,13 @@ PurpleAssistant.prototype.showPopup = function(popup) {
     if ("actions" in popup)
     {
         var choices = [];
-        for (var i in popup.actions)
+        for (var i = 0; i < popup.actions.length; i++)
         {
             choices.push({
                 label: popup.actions[i],
                 value: {
-                    id: popup.actions[i].id,
-                    request_id: popup.actions[i].request_id
+                    id: i,
+                    request_id: popup.id
                 }
             });
         }
@@ -221,16 +226,18 @@ PurpleAssistant.prototype.showPopup = function(popup) {
         dialog.preventCancel = true;
 
         dialog.onChoose = function(value) {
+			Mojo.Log.info("Providing answer, id sent: ", value.id, " request_id sent: ", value.request_id);
             new Mojo.Service.Request(_ValidatorAddress + "answerEvent", {
                 parameters: {
                     answer: value.id,
                     id: value.request_id
                 },
                 onResponse: function() {
+					Mojo.Log.info("Response replied to, id sent: ", id, " request_id sent: ", request_id);
                     this.getEvent();
                 }
             });
-        };
+        }.bind(this);
 
     }
     else if ("type" in popup)

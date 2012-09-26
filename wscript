@@ -23,7 +23,7 @@ def configure(conf):
     conf.env.append_value("CXXFLAGS", ["-g3", "-Wall"])
     conf.env.append_value("ARCH", "-march=armv7-a")
     conf.env.append_value("LIBPATH", [join("..", TOOLDIR, "lib")])
-    conf.env.append_value("LINKFLAGS", "-Wl,-rpath=/var/usr/lib")
+    conf.env.append_value("LINKFLAGS", [join("-Wl,-rpath=..", TOOLDIR, "lib"), "-Wl,-rpath=/var/usr/lib"])
 
     conf.env.append_value("INCLUDES_GLIB", [join("..", TOOLDIR, "include")])
     conf.env.append_value("LIB_GLIB", ["glib-2.0", "gobject-2.0", "gmodule-2.0"])

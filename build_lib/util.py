@@ -17,7 +17,7 @@ def ant_glob(ctx, *args, **kwargs):
 
 def get_pkg_path_and_version(name):
     try:
-        path = glob("deps/%s-*" % name)[-1]
+        path = glob("deps/%s-*" % name)[0]
         version = match("deps/%s-(?P<version>[^/]*)" % name, path).groups()[0]
         return (path, version)
     except IndexError:
